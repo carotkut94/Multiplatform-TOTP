@@ -42,8 +42,9 @@ open class HmacOneTimePasswordGenerator(private val secret: ByteArray,
     // counter = 1234
     // message = [0, 0, 0, 0, 0, 0, 4, -46]
     val message = PlatformBuffer.allocate(8).also {
-      it.writeLong(counter)
+      it[0] = counter
     }
+
 
     // Compute the HMAC hash with the algorithm, 'secret' and 'message' as input parameter.
     //
@@ -51,18 +52,11 @@ open class HmacOneTimePasswordGenerator(private val secret: ByteArray,
     // secret = "Leia"
     // algorithm = "HmacSHA1"
     // hash = [-1, 12, -126, -80, -86, 107, 104, -30, -14, 83, 77, -97, -42, -5, 121, -101, 82, -104, 65, -59]
-
-//    val hash = Mac.getInstance(config.hmacAlgorithm.macAlgorithmName).run {
-//      init(SecretKeySpec(secret, "RAW")) // The hard-coded value 'RAW' is specified in the RFC
-//      doFinal(message.array())
-//    }
-
-
     val hash = when(config.hmacAlgorithm){
       HmacAlgorithm.SHA1 -> HmacSHA1(key = secret)
       HmacAlgorithm.SHA256 -> HmacSHA256(key = secret)
       HmacAlgorithm.SHA512 -> HmacSHA512(key = secret)
-    }.doFinal(message.readByteArray(message.capacity))
+    }.doFinal(message.dumpToByteArray())
 
     // The value of the offset is the lower 4 bits of the last byte of the hash
     // (0x0F = 0000 1111).
@@ -121,4 +115,12 @@ open class HmacOneTimePasswordGenerator(private val secret: ByteArray,
   fun isValid(code: String, counter: Long): Boolean {
     return code == generate(counter)
   }
+}
+
+fun PlatformBuffer.dumpToByteArray(): ByteArray {
+  val byteArray = ByteArray(this.capacity)
+  for (i in 0 until  capacity ){
+    byteArray[i] = this[i]
+  }
+  return byteArray
 }

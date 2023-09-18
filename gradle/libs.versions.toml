@@ -1,20 +1,30 @@
 [versions]
 agp = "8.2.0-alpha08"
+base32 = "2.0.0"
+buffer = "1.3.3"
 kotlin = "1.8.21"
 core-ktx = "1.9.0"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.1.5"
 espresso-core = "3.5.1"
 appcompat = "1.6.1"
+kotlinx-datetime = "0.4.1"
+kotlinx-serialization-json = "1.6.0"
 material = "1.9.0"
+secure-random = "0.1.0"
 
 [libraries]
+base32 = { module = "io.matthewnelson.encoding:base32", version.ref = "base32" }
+buffer = { module = "com.ditchoom:buffer", version.ref = "buffer" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+secure-random = { module = "org.kotlincrypto:secure-random", version.ref = "secure-random" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

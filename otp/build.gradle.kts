@@ -2,7 +2,6 @@ plugins {
     kotlin("multiplatform")
     kotlin("native.cocoapods")
     id("com.android.library")
-    kotlin("plugin.serialization") version "1.9.0"
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
@@ -36,13 +35,12 @@ kotlin {
                 //put your multiplatform dependencies here
                 implementation(platform("org.kotlincrypto.macs:bom:0.3.0"))
 
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
                 implementation("org.kotlincrypto.macs:hmac-sha1")
                 implementation("org.kotlincrypto.macs:hmac-sha2")
-                implementation("org.kotlincrypto:secure-random:0.1.0")
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
-                implementation("com.ditchoom:buffer:1.3.3")
-                implementation("io.matthewnelson.encoding:base32:2.0.0")
+                implementation(libs.secure.random)
+                implementation(libs.kotlinx.datetime)
+                implementation(libs.buffer)
+                api(libs.base32)
             }
         }
         val commonTest by getting {
@@ -55,7 +53,7 @@ kotlin {
 
 android {
     namespace = "com.death.otpman"
-    compileSdk = 33
+    compileSdk = 34
     defaultConfig {
         minSdk = 26
     }

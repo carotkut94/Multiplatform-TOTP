@@ -42,6 +42,24 @@ open class TimeBasedOneTimePasswordGenerator(private val secret: ByteArray, priv
   }
 
   /**
+   * Convenience method for [counter].
+   */
+  fun counter(instant: Instant): Long = counter(instant.toEpochMilliseconds())
+
+  /**
+   * Calculates the start of the given time slot.
+   *
+   * This is basically the reverse calculation of counter(timestamp) method.
+   *
+   * @param counter The counter representing the time slot.
+   * @return The Unix timestamp where the given time slot starts.
+   */
+  fun timeslotStart(counter: Long): Long {
+    val timeStepMillis = config.timeStepUnit.times(config.timeStep.toInt()).duration.inWholeMilliseconds
+    return (counter * timeStepMillis)
+  }
+
+  /**
    * Generates a code representing the time-based one-time password.
    *
    * The TOTP algorithm uses the HTOP algorithm via [HmacOneTimePasswordGenerator.generate],
@@ -58,6 +76,12 @@ open class TimeBasedOneTimePasswordGenerator(private val secret: ByteArray, priv
   fun generate(timestamp: Long = Clock.System.now().toEpochMilliseconds()): String =
     hmacOneTimePasswordGenerator.generate(counter(timestamp))
 
+
+  /**
+   * Convenience method for [generate].
+   */
+  fun generate(instant: Instant): String = generate(instant.toEpochMilliseconds())
+
   /**
    * Validates the given code.
    *
@@ -68,4 +92,9 @@ open class TimeBasedOneTimePasswordGenerator(private val secret: ByteArray, priv
   fun isValid(code: String, timestamp: Long = Clock.System.now().toEpochMilliseconds()): Boolean {
     return code == generate(timestamp)
   }
+
+  /**
+   * Convenience method for [isValid].
+   */
+  fun isValid(code: String, instant: Instant) = isValid(code, instant.toEpochMilliseconds())
 }
